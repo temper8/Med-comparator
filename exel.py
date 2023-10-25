@@ -7,10 +7,21 @@ result_dir = Path('result')
 file_name = None
 
 def prepare(df):
+    df = fix_date(df)
     df['База'] = '+'
     col_list = df.columns.values.tolist()
     df["ФИО ребенка"] = df["Фамилия"] + ' ' + df["Имя"] + ' ' + df["Отчетство"]
     return df.drop(columns=['Фамилия', 'Имя', 'Отчетство'])
+
+def fix_date(df):
+    if 'Дата Рождения' in df.columns:
+        print(f"rename col 'Дата Рождения'")
+        df.rename(columns={"Дата Рождения": "Дата рождения"})
+    time_col = 'Дата рождения',
+    if time_col in df.columns:
+        print('fix date')
+        df[time_col] = pd.to_datetime(df[time_col]).dt.normalize()
+    return df
 
 def read(fn):
     global file_name
