@@ -1,12 +1,10 @@
+from pathlib import Path
 import pandas as pd
 import exel
 
 def executor(fn):
     miac_df, svmed_df, mes_df = exel.read(fn)
- 
-  
-    print('-----------------')
-  
+    print(f'convert: {fn.name}')
     lost_table = []
     svmed_mes = []
     for i, row in svmed_df.iterrows():
@@ -23,9 +21,9 @@ def executor(fn):
     svmed_mes_df = pd.DataFrame(svmed_mes)
 
     #print(pd.DataFrame(lost_table))
-    print('-----------------')
+    #print('-----------------')
 
-    df = miac_df.join(svmed_mes_df.set_index('ФИО ребенка'), lsuffix='_миац', rsuffix='_св-мед', on='ФИО ребенка', how='outer', validate='m:1')
+    df = miac_df.join(svmed_mes_df.set_index('ФИО ребенка'), lsuffix='_миац', rsuffix='_св-мед', on='ФИО ребенка', how='outer', validate='m:m')
     col_list = df.columns.values.tolist()
     #print(col_list)
     first_list = ['ФИО ребенка', 'База_миац', 'База_св-мед', 'Врач', 'ФИО врача', 'Возрастная группа']

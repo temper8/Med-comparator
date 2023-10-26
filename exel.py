@@ -11,16 +11,19 @@ def prepare(df):
     df['База'] = '+'
     col_list = df.columns.values.tolist()
     df["ФИО ребенка"] = df["Фамилия"] + ' ' + df["Имя"] + ' ' + df["Отчетство"]
+    df["ФИО ребенка"] = df["ФИО ребенка"].str.replace('Ё', 'Е')
     return df.drop(columns=['Фамилия', 'Имя', 'Отчетство'])
 
 def fix_date(df):
     if 'Дата Рождения' in df.columns:
         print(f"rename col 'Дата Рождения'")
-        df.rename(columns={"Дата Рождения": "Дата рождения"})
-    time_col = 'Дата рождения',
+        df = df.rename(columns={"Дата Рождения": "Дата рождения"})
+    time_col = 'Дата рождения'
     if time_col in df.columns:
-        print('fix date')
-        df[time_col] = pd.to_datetime(df[time_col]).dt.normalize()
+        #print('fix date')
+        df[time_col] = df[time_col].astype(str)
+    else:
+        print(f'нет {time_col}')
     return df
 
 def read(fn):
@@ -30,8 +33,8 @@ def read(fn):
     with pd.ExcelFile(file_name) as xls:  
         miac = pd.read_excel(xls, sheet_name='МИАЦ')
         miac['База'] = '+'
-        svmed = prepare(pd.read_excel(xls, sheet_name='СВМЕД'))
-        mes_svmed = prepare(pd.read_excel(xls, sheet_name='МЭС СВМЕД'))
+        svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД'))
+        mes_svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД МЭС'))
         return miac, svmed, mes_svmed
 
 def get_result_file_name():
