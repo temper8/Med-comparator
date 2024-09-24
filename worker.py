@@ -39,7 +39,7 @@ def executor(fn):
         'Сводка'     : out_df.sort_values(by=['ФИО ребенка']),
         'МИАЦ'       : miac_df.sort_values(by=['ФИО ребенка']),
         'СВ-МЕД'     : svmed_df.sort_values(by=['ФИО ребенка']),
-        'СВ-МЕД МЭС' : mes_df.sort_values(by=['ФИО ребенка'])
+        'МЭС' : mes_df.sort_values(by=['ФИО ребенка'])
     }
 
     exel.write_results(res)

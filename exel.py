@@ -35,7 +35,7 @@ def read(fn):
         miac["ФИО ребенка"] = miac["ФИО ребенка"].str.replace('Ё', 'Е')
         miac['База'] = '+'
         svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД'))
-        mes_svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД МЭС'))
+        mes_svmed = prepare(pd.read_excel(xls, sheet_name='МЭС'))
         return miac, svmed, mes_svmed
 
 def get_result_file_name():
