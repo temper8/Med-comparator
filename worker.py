@@ -48,5 +48,8 @@ def executor(fn):
 if __name__ == '__main__':
     fl = exel.get_file_list()
     for f in fl:
-        executor(f)
+        try:
+            executor(f)
+        except Exception as e :
+            print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: \n{e}")
         print('----------------------------')
