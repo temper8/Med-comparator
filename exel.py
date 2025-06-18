@@ -8,7 +8,6 @@ file_name = None
 
 def prepare(df):
     df = fix_date(df)
-    df['База'] = '+'
     col_list = df.columns.values.tolist()
     df["ФИО ребенка"] = df["Фамилия"] + ' ' + df["Имя"] + ' ' + df["Отчетство"]
     df["ФИО ребенка"] = df["ФИО ребенка"].str.replace('Ё', 'Е')
@@ -33,9 +32,11 @@ def read(fn):
     with pd.ExcelFile(file_name) as xls:  
         miac = pd.read_excel(xls, sheet_name='МИАЦ')
         miac["ФИО ребенка"] = miac["ФИО ребенка"].str.replace('Ё', 'Е')
-        miac['База'] = '+'
+        miac['миац'] = '+'
         svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД'))
+        svmed['св-мед'] = '+'
         mes_svmed = prepare(pd.read_excel(xls, sheet_name='МЭС'))
+        mes_svmed['мэс'] = 'мэс'
         return miac, svmed, mes_svmed
 
 def get_result_file_name():

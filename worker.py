@@ -14,19 +14,21 @@ def executor(fn):
             lost_table.append(row)
             svmed_mes.append(row)
         else:
-            row['База'] = 'мэс'
+            row['св-мед'] = 'мэс'
             svmed_mes.append(row)
             #print(row)
 
-    svmed_mes_df = pd.DataFrame(svmed_mes)
+    m_df = mes_df[['ФИО ребенка', 'мэс']]
+    #svmed_mes_df = pd.DataFrame(svmed_mes)
+    svmed_mes_join_df = svmed_df.join(m_df.set_index('ФИО ребенка'),  on='ФИО ребенка', how='outer', validate='m:m')
 
     #print(pd.DataFrame(lost_table))
     #print('-----------------')
 
-    df = miac_df.join(svmed_mes_df.set_index('ФИО ребенка'), lsuffix='_миац', rsuffix='_св-мед', on='ФИО ребенка', how='outer', validate='m:m')
+    df = miac_df.join(svmed_mes_join_df.set_index('ФИО ребенка'), lsuffix='_миац', rsuffix='_св-мед', on='ФИО ребенка', how='outer', validate='m:m')
     col_list = df.columns.values.tolist()
     #print(col_list)
-    first_list = ['ФИО ребенка', 'База_миац', 'База_св-мед', 'Врач', 'ФИО врача', 'Возрастная группа']
+    first_list = ['ФИО ребенка', 'миац', 'св-мед', 'мэс', 'Врач', 'ФИО врача', 'Возрастная группа']
     #print(first_list)
     tail =  [item for item in col_list if item not in set(first_list)]
 
@@ -37,6 +39,7 @@ def executor(fn):
 
     res = {
         'Сводка'     : out_df.sort_values(by=['ФИО ребенка']),
+        'СВ-МЕД+МЭС' : svmed_mes_join_df.sort_values(by=['ФИО ребенка']),
         'МИАЦ'       : miac_df.sort_values(by=['ФИО ребенка']),
         'СВ-МЕД'     : svmed_df.sort_values(by=['ФИО ребенка']),
         'МЭС' : mes_df.sort_values(by=['ФИО ребенка'])
