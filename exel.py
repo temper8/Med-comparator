@@ -9,8 +9,8 @@ file_name = None
 def prepare(df):
     df = fix_date(df)
     col_list = df.columns.values.tolist()
-    df["ФИО ребенка"] = df["Фамилия"] + ' ' + df["Имя"] + ' ' + df["Отчетство"]
-    df["ФИО ребенка"] = df["ФИО ребенка"].str.replace('Ё', 'Е')
+    df.loc[:, "ФИО ребенка"] = df["Фамилия"] + ' ' + df["Имя"] + ' ' + df["Отчетство"]
+    df.loc[:, "ФИО ребенка"] = df["ФИО ребенка"].str.replace('Ё', 'Е')
     return df.drop(columns=['Фамилия', 'Имя', 'Отчетство'])
 
 def fix_date(df):
@@ -20,7 +20,7 @@ def fix_date(df):
     time_col = 'Дата рождения'
     if time_col in df.columns:
         #print('fix date')
-        df[time_col] = df[time_col].astype(str)
+        df.loc[:, time_col] = df[time_col].astype(str)
     else:
         print(f'нет {time_col}')
     return df
@@ -29,14 +29,17 @@ def read(fn):
     global file_name
     print(f"reading: {fn}")
     file_name = fn
-    with pd.ExcelFile(file_name) as xls:  
+    with pd.ExcelFile(file_name) as xls: 
+        print('МИАЦ')
         miac = pd.read_excel(xls, sheet_name='МИАЦ')
-        miac["ФИО ребенка"] = miac["ФИО ребенка"].str.replace('Ё', 'Е')
-        miac['миац'] = '+'
+        miac.loc[:, "ФИО ребенка"]= miac["ФИО ребенка"].str.replace('Ё', 'Е')
+        miac.loc[:, 'миац'] = '+'
+        print('СВ-МЕД')
         svmed = prepare(pd.read_excel(xls, sheet_name='СВ-МЕД'))
-        svmed['св-мед'] = '+'
+        svmed.loc[:, 'св-мед'] = '+'
+        print('МЭС')
         mes_svmed = prepare(pd.read_excel(xls, sheet_name='МЭС'))
-        mes_svmed['мэс'] = 'мэс'
+        mes_svmed.loc[:, 'мэс'] = 'мэс'
         return miac, svmed, mes_svmed
 
 def get_result_file_name():
