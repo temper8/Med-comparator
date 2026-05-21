@@ -20,7 +20,6 @@ def executor(fn):
 
     m_df = mes_df[['ФИО ребенка', 'мэс']]
     #svmed_mes_df = pd.DataFrame(svmed_mes)
-    #svmed_mes_join_df = svmed_df.join(m_df.set_index('ФИО ребенка'),  on='ФИО ребенка', how='outer', validate='m:m')
     svmed_mes_join_df = pd.merge(
         svmed_df, 
         m_df, 
@@ -31,7 +30,14 @@ def executor(fn):
     #print(pd.DataFrame(lost_table))
     #print('-----------------')
 
-    df = miac_df.join(svmed_mes_join_df.set_index('ФИО ребенка'), lsuffix='_миац', rsuffix='_св-мед', on='ФИО ребенка', how='outer', validate='m:m')
+    df = pd.merge(
+        miac_df,
+        svmed_mes_join_df,
+        on='ФИО ребенка',
+        how='outer',
+        suffixes=('_миац', '_св-мед'),
+        validate='many_to_many'
+    )
     col_list = df.columns.values.tolist()
     #print(col_list)
     first_list = ['ФИО ребенка', 'миац', 'св-мед', 'мэс', 'Врач', 'ФИО врача', 'Возрастная группа']
@@ -48,7 +54,7 @@ def executor(fn):
         'СВ-МЕД+МЭС' : svmed_mes_join_df.sort_values(by=['ФИО ребенка']),
         'МИАЦ'       : miac_df.sort_values(by=['ФИО ребенка']),
         'СВ-МЕД'     : svmed_df.sort_values(by=['ФИО ребенка']),
-        'МЭС' : mes_df.sort_values(by=['ФИО ребенка'])
+        'МЭС'        : mes_df.sort_values(by=['ФИО ребенка'])
     }
 
     exel.write_results(res)
