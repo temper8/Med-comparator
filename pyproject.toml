@@ -1,17 +1,28 @@
-[tool.poetry]
+[project]
 name = "med-comparator"
 version = "0.1.0"
 description = ""
-authors = ["Alex <temper8@gmail.com>"]
+authors = [{ name = "Alex", email = "temper8@gmail.com" }]
+requires-python = ">=3.11.2,<4"
 readme = "README.md"
-packages = [{include = "med_comparator"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "pandas>=2.1.1,<3",
+    "openpyxl>=3.1.2,<4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11.2"
-pandas = "^2.1.1"
-openpyxl = "^3.1.2"
+[tool.uv]
 
+[tool.uv.build-backend]
+module-name = ["med_comparator"]
+module-root = ""
+namespace = true
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.13,<0.10.0"]
+build-backend = "uv_build"
