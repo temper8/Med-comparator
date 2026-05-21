@@ -20,8 +20,14 @@ def executor(fn):
 
     m_df = mes_df[['ФИО ребенка', 'мэс']]
     #svmed_mes_df = pd.DataFrame(svmed_mes)
-    svmed_mes_join_df = svmed_df.join(m_df.set_index('ФИО ребенка'),  on='ФИО ребенка', how='outer', validate='m:m')
-
+    #svmed_mes_join_df = svmed_df.join(m_df.set_index('ФИО ребенка'),  on='ФИО ребенка', how='outer', validate='m:m')
+    svmed_mes_join_df = pd.merge(
+        svmed_df, 
+        m_df, 
+        on='ФИО ребенка', 
+        how='outer', 
+        validate='many_to_many'  # В merge пишется полное название
+    )
     #print(pd.DataFrame(lost_table))
     #print('-----------------')
 
@@ -51,8 +57,8 @@ def executor(fn):
 if __name__ == '__main__':
     fl = exel.get_file_list()
     for f in fl:
-        try:
-            executor(f)
-        except Exception as e :
-            print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: \n{e}")
+        #try:
+        executor(f)
+        #except Exception as e :
+        #print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: \n{e}")
         print('----------------------------')
