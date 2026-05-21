@@ -3,7 +3,7 @@ import pandas as pd
 import exel
 
 def executor(fn):
-    miac_df, svmed_df, mes_df = exel.read(fn)
+    miac_df, svmed_df, mes_df = exel.read_tables(fn)
     print(f'convert: {fn.name}')
     lost_table = []
     svmed_mes = []

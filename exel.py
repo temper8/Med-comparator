@@ -25,7 +25,7 @@ def fix_date(df):
         print(f'нет {time_col}')
     return df
 
-def read(fn):
+def read_tables(fn):
     global file_name
     print(f"reading: {fn}")
     file_name = fn
